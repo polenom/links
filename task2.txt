@@ -1,0 +1,13 @@
+1. Необходимо написать запрос, который находит  сколько ставок сыграло и не сыграло у каждого пользователя.
+  SELECT bid.client_number, SUM(IF(outcome = 'win', 1, 0)) AS Побед, SUM(IF(outcome = 'win', 0, 1))  AS Поражений
+  FROM bid LEFT JOIN event_value ON bid.play_id = event_value.play_id 
+  WHERE  bid.coefficient = event_value.value
+  GROUP BY bid.client_number;
+
+2. Необходимо написать запрос, который находит сколько раз между собой играли команды.
+  SELECT sortTable.game, COUNT(*) AS game_count
+  FROM (
+  SELECT CONCAT(IF(STRCMP(home_team , away_team) > 0,away_team,home_team),'-',IF(STRCMP(home_team , away_team) > 0,home_team,away_team)) as game
+  FROM event_entity) AS sortTable
+  GROUP BY sortTable.game
+  ORDER BY game_count;
